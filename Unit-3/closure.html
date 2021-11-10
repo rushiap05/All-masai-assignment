@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closure</title>
+    <style>
+
+        .in {
+            width: 206px;
+            height: 200px;
+            border: 1px solid black;
+            border-top: none;
+            overflow: scroll;
+            /* display: none; */
+        }
+
+        img {
+            width: 50px;
+        }
+
+
+        p {
+            text-align: center;
+        }
+
+        .in > div > img,p {
+            display: inline-block;
+        }
+
+
+        #movie {
+            width: 200px;
+        }
+
+
+    </style>
+</head>
+<body>
+    
+    <input oninput="main()" id="movie" type="text" placeholder="Enter Movie Name">
+
+    <div class="in" id="movies"></div>
+
+
+</body>
+</html>
+
+<script>
+
+    let movies_div = document.getElementById('movies');
+
+    async function searchMovie(movie_name) {
+
+        try{
+            let res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=63f66472&s=${movie_name}`);
+            let data = await res.json();
+            console.log("data: ", data);
+
+            return data;
+        }
+        catch(e) {
+            console.log("e: ", e);
+        }
+
+    }
+
+
+    function appendMovies(movies) {
+        movies_div.innerText = null;
+
+        if(movies === undefined){
+            return false;
+        }
+
+        movies.forEach(function(movie) {
+            
+            let p = document.createElement('p');
+            p.textContent = movie.Title
+            
+
+            let img = document.createElement('img');
+            img.src = movie.Poster;
+
+            let div = document.createElement('div');
+            div.append(img,p)
+            movies_div.append(div);
+
+            
+            // console.log(p);
+        });
+
+
+    }
+
+    async function main() {
+        
+        let name = document.getElementById('movie').value;
+
+        let res = await searchMovie(name);
+        let movies_data = res.Search;
+
+        appendMovies(movies_data);
+
+    }
+
+
+
+</script>
+

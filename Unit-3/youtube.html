@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube</title>
+    <style>
+        #query {
+            margin: 20px;
+        }
+
+        #videos {
+            display: grid;
+            grid-template-columns: repeat(4,15%);
+            grid-gap: 10%;
+        }
+    </style>
+</head>
+<body>
+    
+    <input type="text" id="query" placeholder="search for videos">
+
+    <button onclick="searchVideos()">search</button>
+
+    <div id="videos"></div>
+
+
+</body>
+</html>
+
+<script>
+
+    let videos = document.getElementById('videos');
+
+    //AIzaSyBNUB1eAXA1TnzOz-q_z0EswoTN57HxCz4
+
+    //https://youtube.googleapis.com/youtube/v3/search?q=csk&type=videos&key=AIzaSyBNUB1eAXA1TnzOz-q_z0EswoTN57HxCz4
+
+    async function searchVideos() {
+        let input = document.getElementById('query').value;
+
+        let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${input}&type=videos&key=AIzaSyBNUB1eAXA1TnzOz-q_z0EswoTN57HxCz4&maxResults=20`);
+
+        let data = await res.json();
+        console.log('data:',data);
+        appendVideos(data.items)
+    }
+
+    
+
+    function appendVideos(movie_video){
+        videos.innerHTML = null;
+        movie_video.forEach(({id:{videoId}}) => {
+            // console.log("video: ", videoId);
+            let div = document.createElement('div');
+            div.innerHTML = `<iframe width="300" height="160" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+
+            videos.append(div)
+
+        });
+    }
+
+</script>
