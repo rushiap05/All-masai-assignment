@@ -1,0 +1,9 @@
+#query {
+    margin: 20px;
+}
+
+#videos {
+    display: grid;
+    grid-template-columns: repeat(4,15%);
+    grid-gap: 10%;
+}
